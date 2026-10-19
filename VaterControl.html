@@ -1,0 +1,1554 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes">
+<meta name="theme-color" content="#0a100d">
+<meta name="color-scheme" content="dark light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AquaGlow">
+<meta name="format-detection" content="telephone=no,address=no,email=no">
+<meta name="referrer" content="no-referrer">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23080d0b'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle'%3E%F0%9F%92%A7%3C/text%3E%3C/svg%3E">
+<title>AquaGlow</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#080d0b;--panel:#111a15;--panel2:#17231b;--text:#f3f8f2;--muted:#9ba99e;
+  --line:#26372b;--lime:#c5ff35;--mint:#55e6a5;--blue:#66d9ff;--danger:#ff7f86;
+  --shadow:0 18px 55px #0006;
+  --card1:#141f18f2;--card2:#0e1512f2;--hero1:#141f18f2;--hero2:#0e1512f2;
+  --input:#0b120e;--nav:#0d1410;
+  /* размеры адаптируются через media queries ниже */
+  --pad:16px;--radius:22px;--radius-s:14px;
+  --fs-base:16px;--fs-h1:17px;--fs-h2:21px;--fs-h3:18px;
+  --fs-body:14px;--fs-small:12px;--fs-tiny:11px;
+  --gap:10px;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f2f7f3;--panel:#ffffff;--panel2:#f5faf6;--text:#0e1a12;--muted:#63776b;
+  --line:#d4e0d6;--lime:#3ea318;--mint:#0fa66d;--blue:#0a94c7;--danger:#d64b52;
+  --shadow:0 18px 55px #0a1a0e12;
+  --card1:#ffffffee;--card2:#f7fbf7ee;--hero1:#ffffffee;--hero2:#f7fbf7ee;
+  --input:#f5faf6;--nav:#eaf2eb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
+html{background:var(--bg);-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 10% 0%,#193b2540 0,transparent 35%),
+    radial-gradient(ellipse at 100% 18%,#132c4040 0,transparent 34%),
+    var(--bg);
+  color:var(--text);
+  font:var(--fs-body)/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  min-height:100vh;min-height:100dvh;min-height:100svh;
+  overflow-x:hidden;
+  overscroll-behavior-y:none;
+  -webkit-overflow-scrolling:touch;
+  transition:background .3s,color .3s;
+  word-wrap:break-word;overflow-wrap:break-word;hyphens:auto;
+}
+:root[data-theme="light"] body{
+  background:
+    radial-gradient(ellipse at 10% 0%,#c5ff3550 0,transparent 40%),
+    radial-gradient(ellipse at 100% 18%,#66d9ff40 0,transparent 40%),
+    var(--bg);
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+input,select{font-size:16px} /* предотвращает zoom на iOS */
+
+.app{
+  max-width:560px;margin:0 auto;
+  padding:
+    calc(env(safe-area-inset-top,0px) + 8px)
+    max(env(safe-area-inset-right,0px),var(--pad))
+    calc(110px + env(safe-area-inset-bottom,0px))
+    max(env(safe-area-inset-left,0px),var(--pad));
+  min-height:100vh;min-height:100dvh;
+  width:100%;
+}
+@supports not (padding:env(safe-area-inset-top)){
+  .app{padding-top:8px;padding-bottom:110px}
+}
+
+/* ─── Шапка ─────────────────────────────────────────── */
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 0 12px;
+  position:sticky;top:0;z-index:6;
+  background:linear-gradient(to bottom,var(--bg) 75%,transparent);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.logo{
+  width:42px;height:42px;border-radius:14px;flex-shrink:0;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--lime),var(--mint));
+  box-shadow:0 0 24px #bfff3530;color:#07110b;font-size:22px;
+}
+.brand>div{min-width:0}
+.brand h1{font-size:var(--fs-h1);letter-spacing:-.3px;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{color:var(--muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;gap:6px;flex-shrink:0}
+.iconbtn{
+  border:1px solid var(--line);background:var(--panel);color:var(--text);
+  width:42px;height:42px;min-width:42px;min-height:42px;
+  border-radius:14px;font-size:17px;display:grid;place-items:center;
+}
+.iconbtn:active{transform:scale(.94)}
+
+/* ─── Карточки ─────────────────────────────────────── */
+.hero,.card{
+  background:linear-gradient(145deg,var(--hero1),var(--hero2));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.hero{padding:var(--pad);overflow:hidden;position:relative}
+.eyebrow{font-size:var(--fs-tiny);color:var(--muted);letter-spacing:.7px;text-transform:uppercase}
+.hero-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.hero h2{
+  font-size:var(--fs-h2);line-height:1.15;margin:6px 0 4px;letter-spacing:-.5px;
+  word-wrap:break-word;overflow-wrap:anywhere;
+}
+.goal-caption{color:var(--muted);font-size:var(--fs-small)}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  border:1px solid var(--line);border-radius:999px;
+  padding:6px 10px;color:var(--lime);font-size:var(--fs-small);
+  white-space:nowrap;flex-shrink:0;
+}
+
+/* ─── Капля ────────────────────────────────────────── */
+.drop-wrap{display:flex;align-items:center;justify-content:center;padding:10px 0 6px}
+.drop{width:min(170px,50vw);height:auto;aspect-ratio:180/200;filter:drop-shadow(0 0 20px #57dfff24);overflow:visible}
+.drop-outline{fill:#172b2a;stroke:#526d68;stroke-width:2}
+:root[data-theme="light"] .drop-outline{fill:#dcebe3;stroke:#8ba699}
+.water{fill:url(#waterGrad);transform:translateY(var(--water-y,0px));transition:transform 1.1s cubic-bezier(.25,1.2,.35,1)}
+.water-shine{fill:none;stroke:#d9ffff;stroke-width:2;opacity:.65;animation:waveShift 3s linear infinite}
+:root[data-theme="light"] .water-shine{stroke:#ffffff}
+@keyframes waveShift{
+  0%{transform:translate(var(--water-y,0px),0)}
+  50%{transform:translate(calc(var(--water-y,0px) - 4px),2px)}
+  100%{transform:translate(var(--water-y,0px),0)}
+}
+.drop-glow{fill:#7be6ff;opacity:.08}
+.percent{font-size:28px;font-weight:750;fill:var(--text);text-anchor:middle}
+.ml-label{font-size:12px;fill:var(--muted);text-anchor:middle}
+.amount-row{display:flex;align-items:baseline;justify-content:center;gap:5px;margin-top:-4px;flex-wrap:wrap}
+.amount-row strong{font-size:clamp(26px,7vw,32px);letter-spacing:-1px}
+.amount-row span{color:var(--muted);font-size:var(--fs-body)}
+.progress{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:12px 0 6px}
+.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--mint),var(--lime));border-radius:999px;transition:width .6s cubic-bezier(.25,1,.35,1)}
+.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:var(--fs-small);gap:8px;flex-wrap:wrap}
+
+/* ─── Быстрое добавление ───────────────────────────── */
+.quick-title{font-size:var(--fs-body);font-weight:700;margin:16px 0 10px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.drink{
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  color:var(--text);border-radius:16px;padding:12px 4px 10px;
+  min-width:0;min-height:76px;position:relative;
+  transition:transform .12s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.drink:active{transform:scale(.94)}
+.drink .emoji{display:block;font-size:22px;margin-bottom:2px;line-height:1}
+.drink b{font-size:13px;display:block;line-height:1.2}
+.drink small{font-size:var(--fs-tiny);color:var(--muted);line-height:1}
+.drink .badge{
+  position:absolute;top:5px;right:5px;
+  background:#c5ff3522;color:var(--lime);
+  font-size:9px;padding:2px 5px;border-radius:99px;font-weight:700;
+}
+.custom-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.custom-row input{
+  min-width:0;flex:1 1 110px;
+  background:var(--input);border:1px solid var(--line);
+  border-radius:var(--radius-s);color:var(--text);
+  padding:12px;font-size:16px;min-height:48px;
+}
+.custom-row select{
+  flex:0 0 110px;min-height:48px;
+  background:var(--input);border:1px solid var(--line);
+  border-radius:var(--radius-s);color:var(--text);padding:12px;font-size:15px;
+}
+.primary{
+  border:0;background:linear-gradient(110deg,var(--lime),#83f2ad);
+  color:#08110a;font-weight:800;
+  border-radius:var(--radius-s);padding:12px 16px;
+  font-size:15px;min-height:48px;white-space:nowrap;
+  transition:transform .12s;
+}
+.primary:active{transform:scale(.97)}
+.secondary{
+  border:1px solid var(--line);background:var(--panel2);color:var(--text);
+  border-radius:var(--radius-s);padding:12px 14px;font-size:14px;min-height:46px;
+  transition:transform .12s;
+}
+.secondary:active{transform:scale(.97)}
+.danger-ghost{
+  border:1px solid #4a2a2c;background:#1c1214;color:var(--danger);
+  border-radius:var(--radius-s);padding:12px 14px;font-size:14px;min-height:46px;
+}
+:root[data-theme="light"] .danger-ghost{background:#fdecec;border-color:#f0b8ba}
+
+/* ─── Навигация ────────────────────────────────────── */
+.nav{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;
+  background:var(--nav);border:1px solid var(--line);border-radius:18px;
+  margin:14px 0 12px;
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:5;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.nav button{
+  border:0;background:transparent;color:var(--muted);
+  border-radius:13px;padding:8px 2px;font-size:10px;min-height:52px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  transition:background .15s,color .15s;
+}
+.nav button span:first-child{font-size:19px;line-height:1}
+.nav button.active{background:#c5ff3517;color:var(--lime);box-shadow:inset 0 0 0 1px #c5ff3538}
+
+/* ─── Views ────────────────────────────────────────── */
+.view{display:none}
+.view.active{display:block;animation:fade .24s ease}
+@keyframes fade{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:none}}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:5px 2px 12px;gap:8px;flex-wrap:wrap}
+.section-head h2{font-size:var(--fs-h3);margin:0;letter-spacing:-.4px;word-wrap:break-word}
+.card{padding:var(--pad);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);border-radius:18px;padding:13px;
+  min-width:0;
+}
+.stat-card .symbol{font-size:19px;line-height:1}
+.stat-card strong{display:block;font-size:clamp(18px,5vw,22px);margin:5px 0 1px;word-break:break-word;line-height:1.2}
+.stat-card small{color:var(--muted);font-size:var(--fs-small);line-height:1.3;display:block}
+.bars{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;height:120px;padding:8px 0 0}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:0;height:100%;justify-content:flex-end}
+.bar{width:min(26px,85%);min-height:4px;border-radius:7px 7px 3px 3px;background:linear-gradient(180deg,var(--lime),var(--mint));transition:height .35s}
+.bar-col small{font-size:10px;color:var(--muted);white-space:nowrap}
+
+/* ─── Формы ────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.field label{font-size:13px;color:var(--text);line-height:1.3}
+.field input,.field select{
+  width:100%;border:1px solid var(--line);background:var(--input);
+  color:var(--text);border-radius:12px;padding:12px;
+  font-size:16px;min-height:48px;
+}
+.field input:invalid,.field input:focus,.field select:invalid{outline:none;box-shadow:0 0 0 1px var(--line)}
+.field input[type="url"]:invalid{box-shadow:none}
+.field-note{font-size:var(--fs-tiny);color:var(--muted);line-height:1.4}
+.field-error{font-size:var(--fs-small);color:var(--danger);min-height:14px}
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 0;border-bottom:1px solid var(--line);min-height:56px;
+}
+.toggle-row:last-child{border-bottom:0}
+.toggle-row>div{min-width:0;flex:1}
+.toggle-row b{font-size:14px;display:block;line-height:1.3}
+.toggle-row small{display:block;color:var(--muted);font-size:var(--fs-small);margin-top:2px;line-height:1.4}
+.toggle{
+  appearance:none;-webkit-appearance:none;
+  width:50px;height:30px;min-width:50px;min-height:30px;
+  border-radius:99px;background:var(--line);position:relative;
+  flex-shrink:0;transition:background .2s;cursor:pointer;border:0;
+}
+.toggle::before{
+  content:"";position:absolute;width:24px;height:24px;border-radius:50%;
+  left:3px;top:3px;background:#fff;transition:transform .2s;box-shadow:0 2px 4px #0003;
+}
+.toggle:checked{background:var(--lime)}
+.toggle:checked::before{transform:translateX(20px);background:#11190d}
+
+/* ─── История ──────────────────────────────────────── */
+.entry{
+  display:flex;align-items:center;gap:10px;padding:12px 0;
+  border-bottom:1px solid var(--line);cursor:pointer;min-height:60px;
+}
+.entry:last-child{border-bottom:0}
+.entry-icon{
+  width:42px;height:42px;min-width:42px;min-height:42px;
+  display:grid;place-items:center;border-radius:13px;
+  background:var(--panel2);font-size:20px;
+}
+.entry-info{flex:1;min-width:0}
+.entry-info b{display:block;font-size:14px;line-height:1.3;word-break:break-word}
+.entry-info small{color:var(--muted);font-size:var(--fs-small)}
+.entry-amount{font-weight:750;color:var(--mint);white-space:nowrap;font-size:14px}
+.remove{
+  background:none;border:0;color:var(--muted);font-size:22px;
+  padding:6px;min-width:40px;min-height:40px;
+  display:grid;place-items:center;line-height:1;
+}
+.empty{text-align:center;padding:24px 12px;color:var(--muted);font-size:var(--fs-body);line-height:1.5}
+.empty span{display:block;font-size:30px;margin-bottom:8px}
+.notice{
+  padding:12px 14px;border:1px solid #38563a;background:#17291a;
+  border-radius:14px;color:#cce6ce;font-size:var(--fs-small);
+  margin:11px 0;line-height:1.5;
+}
+:root[data-theme="light"] .notice{border-color:#b9dcc0;background:#eaf6ec;color:#1e4a25}
+.warning{border-color:#62512c;background:#292315;color:#f4dca6}
+:root[data-theme="light"] .warning{border-color:#e6cf9a;background:#fdf4dd;color:#6b5417}
+.danger-notice{border-color:#4a2a2c;background:#1c1214;color:#ffd5d8}
+:root[data-theme="light"] .danger-notice{border-color:#f0b8ba;background:#fdecec;color:#7a2328}
+
+/* ─── Push-статус ──────────────────────────────────── */
+.status-line{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:var(--fs-small);color:var(--muted);line-height:1.3}
+.status-dot{width:9px;height:9px;min-width:9px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.status-dot.ok{background:var(--mint);box-shadow:0 0 8px var(--mint)}
+.status-dot.warn{background:#ffcc55}
+.status-dot.err{background:var(--danger)}
+
+/* ─── iOS-баннер ───────────────────────────────────── */
+.ios-banner{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px;background:linear-gradient(145deg,#1a2b3a,#0f1c26);
+  border:1px solid #2d4d63;border-radius:16px;margin:11px 0;
+  font-size:13px;line-height:1.5;
+}
+:root[data-theme="light"] .ios-banner{background:linear-gradient(145deg,#e3f0f8,#d3e5f2);border-color:#a8c8e0}
+.ios-banner .ico{font-size:22px;flex-shrink:0;line-height:1}
+.ios-banner-content{flex:1;min-width:0}
+.ios-banner b{display:block;margin-bottom:4px;color:#8ecaff}
+:root[data-theme="light"] .ios-banner b{color:#1565a0}
+.ios-banner p{margin:0;color:#c5d6e2;word-wrap:break-word}
+:root[data-theme="light"] .ios-banner p{color:#3a5a72}
+.ios-banner button{margin-top:8px}
+
+/* ─── Внешний вид / Язык ───────────────────────────── */
+.theme-toggle{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:3px;flex-shrink:0}
+.theme-toggle button{
+  border:0;background:transparent;color:var(--muted);
+  border-radius:10px;padding:7px 10px;font-size:15px;
+  min-width:42px;min-height:38px;
+}
+.theme-toggle button.active{background:var(--lime);color:#0b1206}
+.lang-menu{display:flex;gap:5px;flex-shrink:0}
+.lang-menu button{padding:8px 12px;min-width:44px;min-height:40px;font-size:13px}
+
+/* ─── Advanced ─────────────────────────────────────── */
+details.advanced{
+  border:1px solid var(--line);border-radius:15px;
+  padding:0 13px;background:var(--panel2);margin-top:10px;
+}
+details.advanced>summary{
+  cursor:pointer;padding:13px 0;font-size:13px;color:var(--muted);
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  min-height:48px;
+}
+details.advanced>summary::-webkit-details-marker{display:none}
+details.advanced>summary::after{content:"▾";transition:transform .2s}
+details.advanced[open]>summary::after{transform:rotate(180deg)}
+
+/* ─── Футер ────────────────────────────────────────── */
+.footer{text-align:center;color:var(--muted);font-size:var(--fs-tiny);padding:14px 10px 0;line-height:1.5}
+
+/* ─── Toast ────────────────────────────────────────── */
+.toast{
+  position:fixed;left:50%;
+  bottom:calc(90px + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:#efffe6;color:#09120a;
+  padding:12px 18px;border-radius:999px;font-weight:700;
+  font-size:13px;box-shadow:var(--shadow);transition:.25s;z-index:60;
+  max-width:min(92vw,420px);text-align:center;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast-btn{background:#09120a;color:#efffe6;border:0;border-radius:99px;padding:6px 12px;font-weight:800;font-size:12px}
+
+/* ─── FAB ──────────────────────────────────────────── */
+.fab{
+  position:fixed;
+  right:max(18px,calc(50% - 280px + 16px));
+  bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  width:58px;height:58px;min-width:58px;min-height:58px;
+  border-radius:50%;border:0;
+  background:linear-gradient(145deg,var(--lime),var(--mint));
+  color:#07110b;font-size:26px;font-weight:800;
+  box-shadow:0 10px 30px #bfff3540;z-index:15;
+  display:grid;place-items:center;
+}
+.fab:active{transform:scale(.94)}
+
+/* ─── Loading ──────────────────────────────────────── */
+.loading{
+  position:fixed;inset:0;background:var(--bg);z-index:100;
+  display:grid;place-items:center;transition:opacity .4s;padding:20px;
+}
+.loading.done{opacity:0;visibility:hidden;pointer-events:none}
+.loading-inner{text-align:center;width:100%;max-width:320px}
+.loading-drop{
+  font-size:50px;animation:bob 1s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 20px #68dfff70);
+}
+@keyframes bob{to{transform:translateY(-9px)}}
+.loading-inner b{display:block;letter-spacing:1px;margin-top:12px;font-size:15px}
+.loading-inner small{color:var(--muted);font-size:12px;line-height:1.4;display:block;margin-top:4px}
+.skeleton{
+  background:linear-gradient(90deg,var(--panel2) 0%,var(--line) 50%,var(--panel2) 100%);
+  background-size:200% 100%;animation:sk 1.4s ease-in-out infinite;
+  border-radius:10px;height:14px;margin:7px 0;
+}
+@keyframes sk{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* ─── Split-кнопки ─────────────────────────────────── */
+.split{display:flex;gap:8px;flex-wrap:wrap}
+.split>*{flex:1;min-width:0}
+
+/* ─── Modal ────────────────────────────────────────── */
+.modal{
+  position:fixed;inset:0;background:#000a;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  z-index:80;display:none;place-items:center;padding:20px;
+}
+.modal.show{display:grid;animation:fade .2s}
+.modal-card{
+  background:linear-gradient(145deg,var(--card1),var(--card2));
+  border:1px solid var(--line);border-radius:20px;
+  padding:20px;max-width:420px;width:100%;
+  box-shadow:var(--shadow);
+  max-height:calc(100svh - 40px);overflow:auto;
+}
+.modal-card h3{margin:0 0 8px;font-size:17px;line-height:1.3;word-wrap:break-word}
+.modal-card p{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.5;word-wrap:break-word}
+.modal-card ol{padding-left:20px;margin:0 0 16px;color:var(--text);font-size:14px;line-height:1.7}
+.modal-card ol li{margin-bottom:6px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ─── Адаптив по ширине ────────────────────────────── */
+/* Маленькие телефоны (iPhone SE, старые Android) */
+@media(max-width:360px){
+  :root{--pad:12px;--radius:18px;--radius-s:12px;--fs-h2:19px;--fs-h3:17px;--gap:8px}
+  .quick-grid{gap:6px}
+  .drink{padding:10px 2px 8px;min-height:70px;border-radius:14px}
+  .drink .emoji{font-size:20px}
+  .drink b{font-size:12px}
+  .drop{width:min(150px,52vw)}
+  .amount-row strong{font-size:26px}
+  .stat-card{padding:11px}
+  .stat-card strong{font-size:18px}
+  .nav button{font-size:9px;min-height:48px}
+  .nav button span:first-child{font-size:17px}
+  .custom-row select{flex:0 0 95px;font-size:14px}
+  .iconbtn{width:40px;height:40px;min-width:40px;min-height:40px;font-size:16px}
+  .logo{width:40px;height:40px;font-size:20px}
+}
+/* Узкие телефоны (360-430) — базовые значения уже такие */
+/* Планшеты и широкие экраны */
+@media(min-width:560px){
+  :root{--pad:20px;--radius:25px;--fs-h2:25px;--fs-body:15px}
+  .app{padding-top:calc(env(safe-area-inset-top,0px) + 16px)}
+  .hero{padding:22px}
+  .drop{width:190px}
+  .quick-grid{gap:10px}
+  .stat-grid{gap:12px}
+}
+@media(min-width:768px){
+  :root{--pad:24px;--fs-h2:28px;--fs-h3:22px}
+  .app{max-width:620px}
+  .quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stat-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ─── Альбомная ориентация на телефоне ─────────────── */
+@media(max-height:500px) and (orientation:landscape){
+  .drop-wrap{display:none}
+  .hero{padding:12px}
+  .quick-title{margin:10px 0 6px}
+  .nav{position:static;margin:10px 0}
+}
+
+/* ─── Тёмная тема системная ───────────────────────── */
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){}
+}
+
+/* ─── Reduced motion ───────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* ─── Print ───────────────────────────────────────── */
+@media print{
+  body{background:#fff;color:#000}
+  .nav,.fab,.top-actions,.quick-grid,.custom-row,.toast,.modal,.hero .split{display:none!important}
+  .hero,.card{box-shadow:none;border-color:#999;background:#fff}
+  .drop{filter:none}
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading" aria-label="Загрузка">
+  <div class="loading-inner">
+    <div class="loading-drop">💧</div>
+    <b>AQUAGLOW</b>
+    <small id="loadingText">Загружаем твой водный баланс…</small>
+    <div class="skeleton" style="width:70%;margin:14px auto 5px"></div>
+    <div class="skeleton" style="width:50%;margin:5px auto"></div>
+  </div>
+</div>
+<main class="app">
+<header class="top">
+  <div class="brand"><div class="logo" aria-hidden="true">💧</div><div><h1>AquaGlow</h1><div class="sub" data-i18n="subtitle">Твой водный баланс</div></div></div>
+  <div class="top-actions">
+    <button class="iconbtn" id="themeBtn" aria-label="Theme">🌙</button>
+    <button class="iconbtn" id="langBtn" aria-label="Language">RU</button>
+    <button class="iconbtn" id="settingsShortcut" aria-label="Settings">⚙</button>
+  </div>
+</header>
+
+<section class="hero" aria-labelledby="todayTitle">
+  <div class="hero-row">
+    <div><div class="eyebrow" data-i18n="today">СЕГОДНЯ</div><h2 id="todayTitle" data-i18n="keepGoing">Продолжай в том же духе</h2><div class="goal-caption" id="dateLabel"></div></div>
+    <span class="pill" id="streakPill">🔥 0 <span data-i18n="dayStreak">дней</span></span>
+  </div>
+  <div class="drop-wrap">
+    <svg class="drop" viewBox="0 0 180 200" role="img" aria-label="Прогресс">
+      <defs>
+        <linearGradient id="waterGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#62dfff"/><stop offset=".55" stop-color="#56e6bd"/><stop offset="1" stop-color="#c5ff35"/></linearGradient>
+        <clipPath id="dropClip"><path d="M90 8 C73 34 29 83 29 124 A61 61 0 0 0 151 124 C151 83 107 34 90 8Z"/></clipPath>
+      </defs>
+      <path class="drop-glow" d="M90 8 C73 34 29 83 29 124 A61 61 0 0 0 151 124 C151 83 107 34 90 8Z"/>
+      <path class="drop-outline" d="M90 8 C73 34 29 83 29 124 A61 61 0 0 0 151 124 C151 83 107 34 90 8Z"/>
+      <g clip-path="url(#dropClip)"><rect id="waterRect" class="water" x="20" y="20" width="140" height="150"/><path id="waterWave" class="water water-shine" d="M20 110 Q40 100 60 110 T100 110 T140 110 T180 110"/></g>
+      <path d="M61 67 Q47 89 47 105" fill="none" stroke="#d9ffff" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+      <text class="percent" x="90" y="119" id="heroPercent">0%</text>
+      <text class="ml-label" x="90" y="139" data-i18n="dailyGoal">дневная цель</text>
+    </svg>
+  </div>
+  <div class="amount-row"><strong id="consumed">0</strong><span data-i18n="mlOf">мл из</span><span id="goalInline">2000 мл</span></div>
+  <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><span id="progressBar"></span></div>
+  <div class="progress-label"><span id="leftLabel">Осталось 2000 мл</span><span id="percentLabel">0%</span></div>
+  <div class="split" style="margin-top:12px">
+    <button class="secondary" id="resetToday" data-i18n="resetToday">Сбросить сегодня</button>
+    <button class="danger-ghost" id="undoLast" data-i18n="undoLast" hidden>Отменить</button>
+  </div>
+</section>
+
+<div class="quick-title" data-i18n="addWater">Добавить воду</div>
+<section class="quick-grid" aria-label="Быстрое добавление">
+  <button class="drink" data-amount="150" data-kind="water"><span class="badge" data-count="150" hidden></span><span class="emoji">🥛</span><b>150</b><small data-i18n="mlShort">мл</small></button>
+  <button class="drink" data-amount="250" data-kind="water"><span class="badge" data-count="250" hidden></span><span class="emoji">💧</span><b>250</b><small data-i18n="mlShort">мл</small></button>
+  <button class="drink" data-amount="330" data-kind="water"><span class="badge" data-count="330" hidden></span><span class="emoji">🧴</span><b>330</b><small data-i18n="mlShort">мл</small></button>
+  <button class="drink" data-amount="500" data-kind="water"><span class="badge" data-count="500" hidden></span><span class="emoji">🚰</span><b>500</b><small data-i18n="mlShort">мл</small></button>
+</section>
+
+<div class="custom-row">
+  <input id="customAmount" type="number" min="1" max="5000" step="10" inputmode="numeric" placeholder="Другой объём" aria-label="Другой объём, мл">
+  <select id="customKind" aria-label="Тип">
+    <option value="water" data-i18n="kindWater">Вода</option>
+    <option value="food" data-i18n="kindFood">Еда</option>
+    <option value="other" data-i18n="kindOther">Напиток</option>
+  </select>
+  <button class="primary" id="addCustom" data-i18n="add">Добавить</button>
+</div>
+<div id="customError" class="field-error" style="margin:4px 2px 0"></div>
+
+<nav class="nav" aria-label="Навигация">
+  <button class="active" data-view="home"><span>⌂</span><span data-i18n="home">Главная</span></button>
+  <button data-view="stats"><span>▥</span><span data-i18n="stats">Статистика</span></button>
+  <button data-view="history"><span>◷</span><span data-i18n="history">История</span></button>
+  <button data-view="settings"><span>⚙</span><span data-i18n="settings">Ещё</span></button>
+</nav>
+
+<section class="view active" id="view-home">
+  <div class="section-head"><h2 data-i18n="todayOverview">Итоги дня</h2><span class="pill" id="goalStatus">0%</span></div>
+  <div class="stat-grid">
+    <div class="stat-card"><span class="symbol">💧</span><strong id="homeTotal">0</strong><small data-i18n="drunkToday">Выпито сегодня</small></div>
+    <div class="stat-card"><span class="symbol">🎯</span><strong id="homeGoal">0</strong><small data-i18n="dailyTarget">Дневная цель</small><span class="field-note" id="goalReason"></span></div>
+    <div class="stat-card"><span class="symbol">🔥</span><strong id="homeStreak">0</strong><small data-i18n="daysInRow">Дней подряд</small></div>
+    <div class="stat-card"><span class="symbol">🥤</span><strong id="homeCups">0</strong><small data-i18n="servings">Порций</small></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="section-head"><h2 data-i18n="reminders">Напоминания</h2><span id="reminderState" class="pill">● <span data-i18n="off">Выкл.</span></span></div>
+    <p class="sub" data-i18n="reminderHomeText" style="margin:0 0 10px">Включи напоминания, чтобы не забывать пить воду.</p>
+    <button class="secondary" id="goSettings" data-i18n="configure">Настроить</button>
+  </div>
+  <div class="notice warning" id="inactivityNotice" hidden></div>
+  <div class="notice" data-i18n="healthNote">Это трекер привычки, а не медицинская рекомендация.</div>
+</section>
+
+<section class="view" id="view-stats">
+  <div class="section-head"><h2 data-i18n="weeklyProgress">За 7 дней</h2><span class="pill" id="weekAverage">—</span></div>
+  <div class="card"><div class="eyebrow" data-i18n="dailyIntake">По дням</div><div class="bars" id="weekBars"></div></div>
+  <div class="stat-grid">
+    <div class="stat-card"><span class="symbol">🏆</span><strong id="goalsMet">0</strong><small data-i18n="goalsMet">Дней с целью</small></div>
+    <div class="stat-card"><span class="symbol">📈</span><strong id="bestDay">0</strong><small data-i18n="bestDay">Лучший день</small></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="section-head"><h2 data-i18n="weekCompare">С прошлой неделей</h2><span style="font-size:22px" id="weekDeltaIcon">📊</span></div>
+    <p id="weekCompareText" class="sub"></p>
+  </div>
+  <div class="card">
+    <div class="section-head"><h2 data-i18n="streakTitle">Серия</h2><span style="font-size:24px">🔥</span></div>
+    <p id="streakDescription" class="sub"></p>
+  </div>
+  <div class="card">
+    <div class="section-head"><h2 data-i18n="reportTitle">Отчёт врачу</h2></div>
+    <p class="sub" data-i18n="reportText" style="margin:0 0 10px">PDF за 30 дней.</p>
+    <div class="split">
+      <button class="secondary" id="reportPrint" data-i18n="reportOpen">Открыть</button>
+      <button class="secondary" id="reportCsv" data-i18n="exportCsv">CSV</button>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="view-history">
+  <div class="section-head">
+    <h2 data-i18n="historyTitle">История</h2>
+    <div class="split" style="flex:0 0 auto">
+      <button class="secondary" id="exportBtn" style="padding:10px 12px;font-size:13px">JSON</button>
+      <button class="secondary" id="exportCsvBtn" style="padding:10px 12px;font-size:13px">CSV</button>
+      <button class="secondary" id="importBtn" style="padding:10px 12px;font-size:13px" data-i18n="import">Импорт</button>
+    </div>
+  </div>
+  <div class="card"><div class="eyebrow" data-i18n="todayEntries">Сегодня</div><div id="historyList"></div></div>
+  <div class="card"><div class="eyebrow" data-i18n="previousDays">Раньше</div><div id="historyDays"></div></div>
+</section>
+
+<section class="view" id="view-settings">
+  <div class="section-head"><h2 data-i18n="profileSettings">Профиль</h2></div>
+  <form id="settingsForm" class="card">
+    <div class="field"><label for="profileName" data-i18n="name">Имя</label><input id="profileName" maxlength="40" autocomplete="nickname"></div>
+    <div class="field"><label for="ageGroup" data-i18n="ageGroup">Возраст</label><select id="ageGroup"><option value="teen">13–17</option><option value="adult">18–64</option><option value="senior">65+</option></select></div>
+    <div class="field"><label for="weight" data-i18n="weight">Вес, кг</label><input id="weight" type="number" min="25" max="300" step=".1" inputmode="decimal" required></div>
+    <div class="field"><label for="goalMode" data-i18n="goalMode">Режим цели</label><select id="goalMode"><option value="auto" data-i18n="goalAuto">Авто</option><option value="manual" data-i18n="goalManual">Вручную</option></select></div>
+    <div class="field"><label for="goal" data-i18n="goal">Цель, мл</label><input id="goal" type="number" min="250" max="7000" step="50" required></div>
+    <div class="field"><label for="activity" data-i18n="activity">Активность</label><select id="activity"><option value="low" data-i18n="actLow">Низкая</option><option value="moderate" data-i18n="actMod">Средняя</option><option value="high" data-i18n="actHigh">Высокая</option></select></div>
+    <div class="field"><label for="climate" data-i18n="climate">Климат</label><select id="climate"><option value="cold" data-i18n="climCold">Холодный</option><option value="temperate" data-i18n="climTemp">Умеренный</option><option value="hot" data-i18n="climHot">Жаркий</option></select></div>
+    <div class="field"><label for="foodFactor" data-i18n="foodFactor">Вода из еды</label><select id="foodFactor"><option value="0" data-i18n="foodNone">Не учитывать</option><option value="0.2">20%</option><option value="0.3">30%</option></select></div>
+    <div class="split"><button class="primary" type="submit" data-i18n="saveSettings">Сохранить</button><button class="secondary" type="button" id="recalc" data-i18n="calcGoal">Рассчитать</button></div>
+  </form>
+
+  <div class="card">
+    <div class="section-head"><h2 data-i18n="reminders">Напоминания</h2></div>
+    <div id="pushPlatformHint"></div>
+    <div class="toggle-row">
+      <div>
+        <b data-i18n="pushToggle">Push-уведомления</b>
+        <small data-i18n="pushToggleHint">Напоминания попить воды</small>
+        <div class="status-line" id="pushStatusLine">
+          <span class="status-dot" id="pushStatusDot"></span>
+          <span id="pushStatusText"></span>
+        </div>
+      </div>
+      <input class="toggle" id="pushToggle" type="checkbox">
+    </div>
+    <div id="pushHelpBox" class="notice warning" hidden style="margin-top:10px">
+      <div id="pushHelpText"></div>
+      <div class="split" style="margin-top:10px">
+        <button class="secondary" type="button" id="pushRecheck" data-i18n="pushRecheck">Проверить</button>
+        <button class="secondary" type="button" id="pushHowTo" data-i18n="pushHowTo">Как включить?</button>
+      </div>
+    </div>
+    <div class="field"><label for="wake" data-i18n="wakeTime">С</label><input id="wake" type="time" value="09:00"></div>
+    <div class="field"><label for="sleep" data-i18n="sleepTime">До</label><input id="sleep" type="time" value="21:00"></div>
+    <div class="field"><label for="interval" data-i18n="interval">Каждые</label><select id="interval"><option value="30">30 мин</option><option value="60">1 час</option><option value="90">1,5 часа</option><option value="120">2 часа</option></select></div>
+  </div>
+
+  <div class="card">
+    <div class="section-head"><h2 data-i18n="appearance">Вид</h2></div>
+    <div class="toggle-row"><div><b data-i18n="theme">Тема</b></div>
+      <div class="theme-toggle" role="tablist">
+        <button data-theme-set="dark" aria-label="Dark">🌙</button>
+        <button data-theme-set="light" aria-label="Light">☀️</button>
+        <button data-theme-set="auto" aria-label="Auto">⚙</button>
+      </div>
+    </div>
+    <div class="toggle-row"><div><b data-i18n="language">Язык</b></div>
+      <div class="lang-menu" role="tablist">
+        <button class="secondary" data-lang="ru">RU</button>
+        <button class="secondary" data-lang="en">EN</button>
+        <button class="secondary" data-lang="uk">UK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head"><h2 data-i18n="dataTitle">Данные</h2></div>
+    <p class="sub" data-i18n="dataText" style="margin:0 0 10px">Хранятся в этом устройстве.</p>
+    <div id="storageWarning" class="notice danger-notice" hidden data-i18n="storageWarning">⚠ Локальное хранилище недоступно.</div>
+    <div class="split">
+      <button class="secondary" id="exportBtn2">Экспорт</button>
+      <button class="secondary" id="importBtn2" data-i18n="import">Импорт</button>
+    </div>
+    <button class="danger-ghost" id="resetData" style="margin-top:10px;width:100%" data-i18n="reset">Сбросить данные</button>
+
+    <details class="advanced">
+      <summary data-i18n="advanced">Дополнительно</summary>
+      <div class="field">
+        <label for="apiUrl" data-i18n="serverUrl">URL API сервера</label>
+        <input id="apiUrl" type="url" placeholder="https://example.com/api" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <div class="field-note" data-i18n="serverHint">Для синхронизации и фоновых push. Оставь пустым, если не используешь.</div>
+        <div class="split" style="margin-top:8px">
+          <button class="secondary" type="button" id="testBot" data-i18n="testServer">Проверить</button>
+        </div>
+        <p id="serverStatus" class="sub" style="margin-top:8px" aria-live="polite"></p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div class="footer">AquaGlow · <span data-i18n="madeFor">для водной привычки</span> · <span id="versionLabel"></span></div>
+</main>
+
+<button class="fab" id="fabAdd" aria-label="Добавить воду">+</button>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <h3 id="modalTitle"></h3>
+    <div id="modalText"></div>
+    <div id="modalExtra"></div>
+    <div class="modal-actions">
+      <button class="secondary" id="modalCancel" data-i18n="cancel">Отмена</button>
+      <button class="primary" id="modalConfirm" data-i18n="confirm">ОК</button>
+    </div>
+  </div>
+</div>
+
+<script async src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+(()=>{'use strict';
+const VERSION='4.0.0';
+console.log('%cAquaGlow v'+VERSION+' loaded','color:#c5ff35;background:#080d0b;padding:2px 6px;border-radius:4px;font-weight:bold');
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const STORAGE_KEY='aquaglow_v2';
+
+/* ─── Платформа ────────────────────────────────────────────────── */
+const PLATFORM=(()=>{
+  const ua=navigator.userAgent;
+  const isIOS=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const isAndroid=/Android/i.test(ua);
+  const isStandalone=window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true;
+  const isTelegram=!!window.Telegram?.WebApp?.initData;
+  const isFile=location.protocol==='file:';
+  const isSecure=location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1';
+  return {isIOS,isAndroid,isStandalone,isTelegram,isFile,isSecure};
+})();
+console.log('AquaGlow platform:',PLATFORM);
+
+/* ─── i18n (сокращённый, без лишних ключей) ─────────────────────── */
+const translations={
+ru:{subtitle:'Твой водный баланс',today:'СЕГОДНЯ',keepGoing:'Продолжай в том же духе',dayStreak:'дней',dailyGoal:'дневная цель',mlOf:'мл из',ml:'мл',mlShort:'мл',addWater:'Добавить воду',smallGlass:'Стакан',add:'Добавить',home:'Главная',stats:'Статистика',history:'История',settings:'Ещё',todayOverview:'Итоги дня',drunkToday:'Выпито сегодня',dailyTarget:'Дневная цель',daysInRow:'Дней подряд',servings:'Порций',reminders:'Напоминания',off:'Выкл.',reminderHomeText:'Включи напоминания, чтобы не забывать пить воду.',configure:'Настроить',healthNote:'Это трекер привычки, а не медицинская рекомендация.',weeklyProgress:'За 7 дней',dailyIntake:'По дням',goalsMet:'Дней с целью',bestDay:'Лучший день',streakTitle:'Серия',historyTitle:'История',export:'Экспорт',import:'Импорт',todayEntries:'Сегодня',previousDays:'Раньше',profileSettings:'Профиль',name:'Имя',ageGroup:'Возраст',weight:'Вес, кг',goal:'Цель, мл',goalMode:'Режим цели',goalAuto:'Авто',goalManual:'Вручную',activity:'Активность',actLow:'Низкая',actMod:'Средняя',actHigh:'Высокая',climate:'Климат',climCold:'Холодный',climTemp:'Умеренный',climHot:'Жаркий',foodFactor:'Вода из еды',foodNone:'Не учитывать',wakeTime:'С',sleepTime:'До',interval:'Каждые',pushToggle:'Push-уведомления',pushToggleHint:'Напоминания попить воды',dataTitle:'Данные',dataText:'Хранятся в этом устройстве.',reset:'Сбросить данные',madeFor:'для водной привычки',left:'Осталось',goalReached:'Цель достигнута! 🎉',added:'Добавлено',removed:'Удалено',saved:'Сохранено',goalCalc:'Цель рассчитана.',empty:'Записей нет. Добавь первый стакан!',noPrevious:'Раньше ничего не было.',average:'Среднее',confirmReset:'Сбросить все данные? Это нельзя отменить.',noStreak:'Достигай цели, чтобы начать серию.',streakDays:'Серия: {n} {unit}.',water:'Вода',other:'Напиток',kindWater:'Вода',kindFood:'Еда',kindOther:'Напиток',food:'Еда',notificationText:'Пора выпить воды 💧',inactivityText:'Давно не пил — сделай глоток 💧',weightNeeded:'Введи вес 25–300 кг.',amountNeeded:'Введи объём 1–5000 мл.',exported:'Экспортировано.',undo:'Отменить',undone:'Отменено',resetToday:'Сбросить сегодня',undoLast:'Отменить',confirmResetToday:'Удалить все записи за сегодня?',todayReset:'Удалено',editEntry:'Изменить',editAmount:'Объём, мл',editLabel:'Название',cancel:'Отмена',confirm:'ОК',confirmImport:'Импортировать данные?',imported:'Импортировано: {n}',importError:'Не удалось прочитать файл.',weekCompare:'С прошлой неделей',weekDeltaUp:'На {n}% больше 📈',weekDeltaDown:'На {n}% меньше 📉',weekDeltaSame:'Примерно так же',weekDeltaNoData:'Нет данных',records:'записей',day:'день',days:'дней',noActivity:'Давно не пил 💧',storageWarning:'⚠ Локальное хранилище недоступно.',appearance:'Вид',theme:'Тема',language:'Язык',reportTitle:'Отчёт врачу',reportText:'PDF за 30 дней.',reportOpen:'Открыть',exportCsv:'CSV',report30:'Отчёт за 30 дней',reportGenerated:'Сформировано',reportAvg:'Среднее/день',reportGoal:'Цель',reportCompletion:'Выполнение',reportDaysMet:'Дней с целью',reportDistribution:'По времени суток',reportMorning:'Утро',reportDay:'День',reportEvening:'Вечер',reportNight:'Ночь',reportEntries:'Всего',reportTopAmount:'Максимум',goalReasonAuto:'Авто: {mlkg} мл/кг × {w} кг',goalReasonManual:'Вручную',kindWeight:'Тип',advanced:'Дополнительно',serverUrl:'URL API сервера',serverHint:'Для синхронизации и фоновых push.',testServer:'Проверить',serverOk:'Сервер отвечает',serverError:'Сервер не отвечает',serverMissing:'Введи URL',serverNotConfigured:'Локальный режим',serverConfigured:'URL задан',
+pushEnabled:'Включены',pushDisabled:'Выключены',pushStatusOn:'Разрешено',pushStatusOff:'Не разрешено',pushStatusDenied:'Заблокировано',pushStatusUnsupported:'Не поддерживается',pushStatusFile:'Файл-режим',pushStatusIOS:'Требуется установка',
+pushHelpDenied:'Ты запретил уведомления. Разреши их в настройках браузера или приложения.',
+pushHelpFile:'Файл открыт напрямую — уведомления недоступны. Открой через сервер или добавь на домашний экран.',
+pushHelpUnsupported:'Этот браузер не поддерживает уведомления.',
+pushHelpAsk:'Разреши уведомления в диалоге браузера.',
+pushHelpIOS:'На iPhone/iPad уведомления работают только после добавления приложения на домашний экран. Нажми «Поделиться» → «На экран «Домой»», открой с иконки и включи push заново.',
+pushRecheck:'Проверить',pushHowTo:'Как включить?',pushStillDenied:'Ещё не разрешено. Разреши и нажми «Проверить».',pushNowGranted:'Отлично! Уведомления разрешены.',
+howToTitle:'Как включить уведомления',howToIOS:'iPhone/iPad:\n1. Открой сайт в Safari\n2. Нажми «Поделиться» (квадрат со стрелкой)\n3. «На экран «Домой»»\n4. Открой приложение с иконки\n5. Включи Push-уведомления заново',howToAndroid:'Android:\n1. Нажми ⋮ в браузере\n2. Настройки сайта → Уведомления\n3. Разреши для этого сайта',howToDesktop:'Компьютер:\n1. Нажми 🔒 рядом с адресом\n2. Уведомления → Разрешить\n3. Перезагрузи страницу',gotIt:'Понятно',installTitle:'Добавить на домашний экран',installText:'Так уведомления будут работать даже когда приложение закрыто, и запуск будет в один тап.',installLater:'Позже',startError:'Ошибка запуска: '},
+en:{subtitle:'Your hydration balance',today:'TODAY',keepGoing:'Keep up the great work',dayStreak:'days',dailyGoal:'daily goal',mlOf:'ml of',ml:'ml',mlShort:'ml',addWater:'Add water',smallGlass:'Glass',add:'Add',home:'Home',stats:'Stats',history:'History',settings:'More',todayOverview:'Today',drunkToday:'Drunk today',dailyTarget:'Daily target',daysInRow:'Days in a row',servings:'Servings',reminders:'Reminders',off:'Off',reminderHomeText:'Enable reminders so you don’t forget to drink.',configure:'Configure',healthNote:'Habit tracker, not medical advice.',weeklyProgress:'Last 7 days',dailyIntake:'By day',goalsMet:'Days met',bestDay:'Best day',streakTitle:'Streak',historyTitle:'History',export:'Export',import:'Import',todayEntries:'Today',previousDays:'Earlier',profileSettings:'Profile',name:'Name',ageGroup:'Age',weight:'Weight, kg',goal:'Target, ml',goalMode:'Target mode',goalAuto:'Auto',goalManual:'Manual',activity:'Activity',actLow:'Low',actMod:'Moderate',actHigh:'High',climate:'Climate',climCold:'Cold',climTemp:'Temperate',climHot:'Hot',foodFactor:'Water from food',foodNone:'Skip',wakeTime:'From',sleepTime:'To',interval:'Every',pushToggle:'Push notifications',pushToggleHint:'Reminders to drink water',dataTitle:'Data',dataText:'Stored on this device.',reset:'Reset data',madeFor:'for your hydration habit',left:'Left',goalReached:'Goal reached! 🎉',added:'Added',removed:'Removed',saved:'Saved',goalCalc:'Target calculated.',empty:'No entries yet.',noPrevious:'No history yet.',average:'Average',confirmReset:'Reset all data? This cannot be undone.',noStreak:'Meet the goal to start a streak.',streakDays:'Streak: {n} {unit}.',water:'Water',other:'Drink',kindWater:'Water',kindFood:'Food',kindOther:'Drink',food:'Food',notificationText:'Time for water 💧',inactivityText:'Long time no drink 💧',weightNeeded:'Enter weight 25–300 kg.',amountNeeded:'Enter 1–5000 ml.',exported:'Exported.',undo:'Undo',undone:'Undone',resetToday:'Reset today',undoLast:'Undo',confirmResetToday:'Delete today’s entries?',todayReset:'Cleared',editEntry:'Edit',editAmount:'Amount, ml',editLabel:'Label',cancel:'Cancel',confirm:'OK',confirmImport:'Import data?',imported:'Imported: {n}',importError:'Could not read file.',weekCompare:'vs last week',weekDeltaUp:'{n}% more 📈',weekDeltaDown:'{n}% less 📉',weekDeltaSame:'About the same',weekDeltaNoData:'No data',records:'entries',day:'day',days:'days',noActivity:'Take a sip 💧',storageWarning:'⚠ Storage unavailable.',appearance:'Appearance',theme:'Theme',language:'Language',reportTitle:'Report',reportText:'30-day PDF.',reportOpen:'Open',exportCsv:'CSV',report30:'30-day report',reportGenerated:'Generated',reportAvg:'Avg/day',reportGoal:'Target',reportCompletion:'Completion',reportDaysMet:'Days met',reportDistribution:'By time of day',reportMorning:'Morning',reportDay:'Day',reportEvening:'Evening',reportNight:'Night',reportEntries:'Total',reportTopAmount:'Max',goalReasonAuto:'Auto: {mlkg} ml/kg × {w} kg',goalReasonManual:'Manual',kindWeight:'Type',advanced:'Advanced',serverUrl:'Server API URL',serverHint:'For sync and background push.',testServer:'Test',serverOk:'Server is up',serverError:'Server not responding',serverMissing:'Enter URL',serverNotConfigured:'Local mode',serverConfigured:'URL set',
+pushEnabled:'On',pushDisabled:'Off',pushStatusOn:'Allowed',pushStatusOff:'Not allowed',pushStatusDenied:'Blocked',pushStatusUnsupported:'Unsupported',pushStatusFile:'File mode',pushStatusIOS:'Install required',
+pushHelpDenied:'Notifications are blocked. Allow them in browser or app settings.',
+pushHelpFile:'Opened as file — notifications are unavailable. Use a server or add to home screen.',
+pushHelpUnsupported:'This browser doesn’t support notifications.',
+pushHelpAsk:'Allow notifications in the browser prompt.',
+pushHelpIOS:'On iPhone/iPad notifications work only after adding the app to the Home Screen. Tap Share → Add to Home Screen, open from the icon and enable push again.',
+pushRecheck:'Check',pushHowTo:'How?',pushStillDenied:'Still blocked. Allow and tap “Check”.',pushNowGranted:'Great! Notifications allowed.',
+howToTitle:'How to allow notifications',howToIOS:'iPhone/iPad:\n1. Open in Safari\n2. Tap Share\n3. Add to Home Screen\n4. Open from the icon\n5. Enable push again',howToAndroid:'Android:\n1. Tap ⋮ in browser\n2. Site settings → Notifications\n3. Allow for this site',howToDesktop:'Desktop:\n1. Click 🔒 near the address\n2. Notifications → Allow\n3. Reload the page',gotIt:'Got it',installTitle:'Add to home screen',installText:'So reminders work even when the app is closed, and launch takes one tap.',installLater:'Later',startError:'Startup error: '},
+uk:{subtitle:'Твій водний баланс',today:'СЬОГОДНІ',keepGoing:'Продовжуй у тому ж дусі',dayStreak:'днів',dailyGoal:'денна мета',mlOf:'мл з',ml:'мл',mlShort:'мл',addWater:'Додати воду',smallGlass:'Склянка',add:'Додати',home:'Головна',stats:'Статистика',history:'Історія',settings:'Ще',todayOverview:'Підсумки дня',drunkToday:'Випито',dailyTarget:'Денна мета',daysInRow:'Днів поспіль',servings:'Порцій',reminders:'Нагадування',off:'Вимк.',reminderHomeText:'Увімкни нагадування.',configure:'Налаштувати',healthNote:'Трекер звички, не медична порада.',weeklyProgress:'За 7 днів',dailyIntake:'По днях',goalsMet:'Днів з метою',bestDay:'Найкращий день',streakTitle:'Серія',historyTitle:'Історія',export:'Експорт',import:'Імпорт',todayEntries:'Сьогодні',previousDays:'Раніше',profileSettings:'Профіль',name:'Ім’я',ageGroup:'Вік',weight:'Вага, кг',goal:'Мета, мл',goalMode:'Режим мети',goalAuto:'Авто',goalManual:'Вручну',activity:'Активність',actLow:'Низька',actMod:'Середня',actHigh:'Висока',climate:'Клімат',climCold:'Холодний',climTemp:'Помірний',climHot:'Спекотний',foodFactor:'Вода з їжі',foodNone:'Не враховувати',wakeTime:'З',sleepTime:'До',interval:'Кожні',pushToggle:'Push-повідомлення',pushToggleHint:'Нагадування пити воду',dataTitle:'Дані',dataText:'Зберігаються на пристрої.',reset:'Скинути дані',madeFor:'для водної звички',left:'Залишилось',goalReached:'Мету досягнуто! 🎉',added:'Додано',removed:'Видалено',saved:'Збережено',goalCalc:'Мету розраховано.',empty:'Записів немає.',noPrevious:'Історії немає.',average:'Середнє',confirmReset:'Скинути всі дані?',noStreak:'Досягай мети, щоб почати серію.',streakDays:'Серія: {n} {unit}.',water:'Вода',other:'Напій',kindWater:'Вода',kindFood:'Їжа',kindOther:'Напій',food:'Їжа',notificationText:'Час пити воду 💧',inactivityText:'Давно не пив 💧',weightNeeded:'Введи вагу 25–300 кг.',amountNeeded:'Введи 1–5000 мл.',exported:'Експортовано.',undo:'Скасувати',undone:'Скасовано',resetToday:'Скинути сьогодні',undoLast:'Скасувати',confirmResetToday:'Видалити сьогоднішні записи?',todayReset:'Видалено',editEntry:'Змінити',editAmount:'Об’єм, мл',editLabel:'Назва',cancel:'Скасувати',confirm:'ОК',confirmImport:'Імпортувати?',imported:'Імпортовано: {n}',importError:'Не вдалося прочитати.',weekCompare:'З минулим тижнем',weekDeltaUp:'+{n}% 📈',weekDeltaDown:'−{n}% 📉',weekDeltaSame:'Приблизно так само',weekDeltaNoData:'Даних немає',records:'записів',day:'день',days:'днів',noActivity:'Ковток води 💧',storageWarning:'⚠ Сховище недоступне.',appearance:'Вигляд',theme:'Тема',language:'Мова',reportTitle:'Звіт',reportText:'PDF за 30 днів.',reportOpen:'Відкрити',exportCsv:'CSV',report30:'Звіт за 30 днів',reportGenerated:'Сформовано',reportAvg:'Середнє/день',reportGoal:'Мета',reportCompletion:'Виконання',reportDaysMet:'Днів з метою',reportDistribution:'За часом',reportMorning:'Ранок',reportDay:'День',reportEvening:'Вечір',reportNight:'Ніч',reportEntries:'Всього',reportTopAmount:'Максимум',goalReasonAuto:'Авто: {mlkg} мл/кг × {w} кг',goalReasonManual:'Вручну',kindWeight:'Тип',advanced:'Додатково',serverUrl:'URL API',serverHint:'Для синхронізації та push.',testServer:'Перевірити',serverOk:'Працює',serverError:'Не відповідає',serverMissing:'Введи URL',serverNotConfigured:'Локальний режим',serverConfigured:'URL задано',
+pushEnabled:'Увімкнено',pushDisabled:'Вимкнено',pushStatusOn:'Дозволено',pushStatusOff:'Не дозволено',pushStatusDenied:'Заблоковано',pushStatusUnsupported:'Не підтримується',pushStatusFile:'Файл-режим',pushStatusIOS:'Потрібна установка',
+pushHelpDenied:'Сповіщення заблоковані. Дозволь у налаштуваннях.',
+pushHelpFile:'Файл відкрито напряму — сповіщення недоступні.',
+pushHelpUnsupported:'Браузер не підтримує сповіщення.',
+pushHelpAsk:'Дозволь сповіщення в діалозі.',
+pushHelpIOS:'На iPhone/iPad сповіщення працюють лише після додавання на головний екран. Поділитися → На головний екран, відкрий з іконки та увімкни push заново.',
+pushRecheck:'Перевірити',pushHowTo:'Як?',pushStillDenied:'Ще не дозволено.',pushNowGranted:'Чудово! Дозволено.',
+howToTitle:'Як дозволити',howToIOS:'iPhone/iPad:\n1. Відкрий у Safari\n2. Поділитися\n3. На головний екран\n4. Відкрий з іконки\n5. Увімкни push',howToAndroid:'Android:\n1. ⋮ у браузері\n2. Налаштування сайту → Сповіщення\n3. Дозволь',howToDesktop:'Комп’ютер:\n1. 🔒 біля адреси\n2. Сповіщення → Дозволити\n3. Перезавантаж',gotIt:'Зрозуміло',installTitle:'Додати на головний екран',installText:'Так нагадування працюватимуть навіть коли додаток закрито.',installLater:'Пізніше',startError:'Помилка запуску: '}
+};
+
+/* ─── Утилиты ──────────────────────────────────────────────────── */
+const today=()=>dateKey(new Date());
+function dateKey(d){return `--`}
+const plural=(n,one,many)=>n===1?one:many;
+function emptyState(){return {
+  profile:{name:'',ageGroup:'adult',weight:70,goal:2100,goalMode:'auto',activity:'moderate',climate:'temperate',
+           foodFactor:0.3,wake:'09:00',sleep:'21:00',interval:60,
+           pushEnabled:false,apiUrl:''},
+  entries:[],lang:'ru',theme:'auto',lastReminder:0,lastActivity:Date.now(),
+  pushSubscription:null,installDismissed:false
+}}
+let state=emptyState();
+
+/* ─── IndexedDB ────────────────────────────────────────────────── */
+let db=null,dbOk=false,lsOk=false;
+async function initDB(){
+  return new Promise(res=>{
+    if(!('indexedDB'in window)){res(false);return}
+    let done=false;
+    const t=setTimeout(()=>{if(!done){done=true;res(false)}},2500);
+    const finish=(v)=>{if(done)return;done=true;clearTimeout(t);res(v)};
+    try{
+      const req=indexedDB.open('aquaglow',1);
+      req.onupgradeneeded=e=>{
+        const d=e.target.result;
+        if(!d.objectStoreNames.contains('state'))d.createObjectStore('state');
+      };
+      req.onsuccess=e=>{db=e.target.result;dbOk=true;finish(true)};
+      req.onerror=()=>finish(false);
+      req.onblocked=()=>finish(false);
+    }catch{finish(false)}
+  });
+}
+function checkLS(){try{const k='__aq_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);return true}catch{return false}}
+async function dbGet(key){if(!db)return null;return new Promise(res=>{try{const r=db.transaction('state','readonly').objectStore('state').get(key);r.onsuccess=()=>res(r.result??null);r.onerror=()=>res(null)}catch{res(null)}})}
+async function dbSet(key,val){if(!db)return false;return new Promise(res=>{try{const r=db.transaction('state','readwrite').objectStore('state').put(val,key);r.onsuccess=()=>res(true);r.onerror=()=>res(false)}catch{res(false)}})}
+async function migrateFromLS(){
+  try{
+    const rawV2=localStorage.getItem(STORAGE_KEY);
+    const rawV1=localStorage.getItem('aquaglow_v1');
+    if(!rawV2&&!rawV1)return null;
+    const old=JSON.parse(rawV2||rawV1);
+    localStorage.removeItem(STORAGE_KEY);localStorage.removeItem('aquaglow_v1');
+    return old;
+  }catch{return null}
+}
+async function loadState(){
+  let ok=false;
+  try{ ok=await initDB(); }catch(e){ console.warn('AquaGlow: initDB failed',e); ok=false; }
+  if(ok){
+    try{
+      const saved=await dbGet('root');
+      if(saved){state=saved}
+      else{
+        const legacy=await migrateFromLS();
+        if(legacy)state={...emptyState(),...legacy,profile:{...emptyState().profile,...(legacy.profile||{})}};
+        await dbSet('root',state);
+      }
+    }catch(e){console.warn('AquaGlow: dbGet/Set failed',e)}
+  }else{
+    try{
+      const raw=localStorage.getItem(STORAGE_KEY);
+      if(raw)state=JSON.parse(raw);
+      else{
+        const legacy=await migrateFromLS();
+        if(legacy)state={...emptyState(),...legacy,profile:{...emptyState().profile,...(legacy.profile||{})}};
+      }
+    }catch(e){console.warn('AquaGlow: localStorage failed',e)}
+  }
+  state.profile={...emptyState().profile,...(state.profile||{})};
+  state.entries=Array.isArray(state.entries)?state.entries:[];
+  state.lang=['ru','en','uk'].includes(state.lang)?state.lang:'ru';
+  state.theme=['dark','light','auto'].includes(state.theme)?state.theme:'auto';
+  if(!state.lastActivity)state.lastActivity=Date.now();
+}
+let saveTimer=null;
+function persist(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    if(dbOk){await dbSet('root',state);return}
+    if(lsOk){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{lsOk=false}}
+  },120);
+}
+
+/* ─── Вычисления ──────────────────────────────────────────────── */
+function dayEntries(day=today()){return state.entries.filter(e=>e.day===day)}
+function rawAmount(e){if(e.kind==='food')return e.amount*(1-Number(state.profile.foodFactor||0));return e.amount}
+function total(day=today()){return dayEntries(day).reduce((s,e)=>s+rawAmount(e),0)}
+function daysBack(n){const d=new Date();d.setDate(d.getDate()-n);return dateKey(d)}
+function streak(){let count=0;for(let i=0;i<366;i++){const d=daysBack(i);if(total(d)>=effectiveGoal())count++;else if(i===0)continue;else break}return count}
+function computeAutoGoal(){
+  const w=Number(state.profile.weight)||70;
+  let mlkg=30;
+  if(state.profile.ageGroup==='teen')mlkg=35;
+  if(state.profile.ageGroup==='senior')mlkg=28;
+  if(state.profile.activity==='high')mlkg+=5;
+  if(state.profile.activity==='low')mlkg-=2;
+  if(state.profile.climate==='hot')mlkg+=5;
+  if(state.profile.climate==='cold')mlkg-=2;
+  return {goal:Math.round(w*mlkg/50)*50,mlkg,w}
+}
+function effectiveGoal(){return state.profile.goalMode==='auto'?computeAutoGoal().goal:(Number(state.profile.goal)||2000)}
+
+const t=k=>translations[state.lang]?.[k]||translations.ru[k]||k;
+const fmt=n=>Math.round(n).toLocaleString(state.lang==='ru'?'ru-RU':state.lang==='uk'?'uk-UA':'en-US');
+const fmtAmount=n=>` `;
+const fmtAmountShort=n=>``;
+
+/* ─── Тема ────────────────────────────────────────────────────── */
+const mqDark=window.matchMedia?.('(prefers-color-scheme: dark)');
+function applyTheme(){
+  const theme=state.theme;
+  const dark=theme==='dark'||(theme==='auto'&&mqDark?.matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',dark?'#080d0b':'#f2f7f3');
+  $('#themeBtn').textContent=dark?'🌙':'☀️';
+  $$('[data-theme-set]').forEach(b=>b.classList.toggle('active',b.dataset.themeSet===theme));
+}
+mqDark?.addEventListener?.('change',()=>{if(state.theme==='auto')applyTheme()});
+
+/* ─── Запись ──────────────────────────────────────────────────── */
+function addEntry(amount,kind='water',label=''){
+  if(!Number.isFinite(amount)||amount<1||amount>5000){showToast(t('amountNeeded'));return}
+  const entry={id:(Date.now()+Math.random()).toString(36),day:today(),at:new Date().toISOString(),amount:Math.round(amount),kind,label};
+  state.entries.push(entry);state.lastActivity=Date.now();
+  persist();render();showToast(`: `,t('undo'),()=>{
+    state.entries=state.entries.filter(x=>x.id!==entry.id);persist();render();showToast(t('undone'));
+  });
+  if(navigator.vibrate)try{navigator.vibrate(15)}catch{}
+}
+function updateEntry(id,patch){
+  const e=state.entries.find(x=>x.id===id);if(!e)return;
+  if(patch.amount!==undefined){if(!Number.isFinite(patch.amount)||patch.amount<1||patch.amount>5000){showToast(t('amountNeeded'));return}e.amount=Math.round(patch.amount)}
+  if(patch.label!==undefined)e.label=patch.label;
+  if(patch.kind!==undefined)e.kind=patch.kind;
+  persist();render();showToast(t('saved'));
+}
+function removeEntry(id){state.entries=state.entries.filter(x=>x.id!==id);persist();render()}
+
+/* ─── Toast ───────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(message,actionLabel,action){
+  const el=$('#toast');
+  el.innerHTML=actionLabel?`<span></span><button class="toast-btn" id="toastAction"></button>`:`<span></span>`;
+  el.classList.add('show');clearTimeout(toastTimer);
+  if(actionLabel&&action){$('#toastAction').onclick=()=>{el.classList.remove('show');action()}}
+  toastTimer=setTimeout(()=>el.classList.remove('show'),actionLabel?4500:2400);
+}
+
+/* ─── Modal ───────────────────────────────────────────────────── */
+function openModal({title,html,extra,confirmLabel='OK',onConfirm,danger=false,hideCancel=false,onlyCancel=false,cancelLabel}){
+  $('#modalTitle').textContent=title;
+  $('#modalText').innerHTML=html||'';
+  $('#modalExtra').innerHTML=extra||'';
+  const c=$('#modalConfirm');c.textContent=confirmLabel;c.className=danger?'danger-ghost':'primary';
+  c.style.display=onlyCancel?'none':'';
+  const cc=$('#modalCancel');
+  cc.textContent=cancelLabel||t('cancel');
+  cc.style.display=hideCancel?'none':'';
+  $('#modal').classList.add('show');
+  const close=()=>{$('#modal').classList.remove('show');c.onclick=null;cc.onclick=null};
+  cc.onclick=close;
+  c.onclick=()=>{close();onConfirm?.()};
+}
+
+/* ─── Рендер ──────────────────────────────────────────────────── */
+function render(){
+  const consumed=total(),goal=effectiveGoal();
+  const pct=Math.min(100,Math.round(consumed/goal*100));
+  const left=Math.max(0,goal-consumed);
+  $('#dateLabel').textContent=new Date().toLocaleDateString(state.lang==='ru'?'ru-RU':state.lang==='uk'?'uk-UA':'en-US',{weekday:'long',day:'numeric',month:'long'});
+  $('#consumed').textContent=fmt(consumed);
+  $('#goalInline').textContent=fmtAmount(goal);
+  $('#heroPercent').textContent=pct+'%';
+  $('#percentLabel').textContent=pct+'%';
+  $('#leftLabel').textContent=left?` `:t('goalReached');
+  $('#progressBar').style.width=pct+'%';
+  $('#progress').setAttribute('aria-valuenow',pct);
+  $('#waterRect').style.setProperty('--water-y',(1-pct/100)*145+'px');
+  const s=streak();
+  $('#streakPill').innerHTML=`🔥  <span></span>`;
+  $('#goalStatus').textContent=pct+'%';
+  $('#homeTotal').textContent=fmtAmount(consumed);
+  $('#homeGoal').textContent=fmtAmount(goal);
+  if(state.profile.goalMode==='auto'){
+    const a=computeAutoGoal();
+    $('#goalReason').textContent=t('goalReasonAuto').replace('{mlkg}',a.mlkg).replace('{w}',a.w);
+  }else $('#goalReason').textContent=t('goalReasonManual');
+  $('#homeStreak').textContent=s;
+  $('#homeCups').textContent=dayEntries().length;
+  $('#reminderState').innerHTML=state.profile.pushEnabled?`● `:`● `;
+  $('#streakDescription').textContent=s?t('streakDays').replace('{n}',s).replace('{unit}',plural(s,t('day'),t('days'))):t('noStreak');
+
+  const counts={};dayEntries().forEach(e=>{counts[e.amount]=(counts[e.amount]||0)+1});
+  $$('.drink').forEach(b=>{const n=counts[b.dataset.amount]||0;const badge=b.querySelector('.badge');badge.hidden=!n;badge.textContent='×'+n});
+
+  $('#undoLast').hidden=!state.entries.length;
+  $('#resetToday').hidden=!dayEntries().length;
+
+  const last=state.entries.length?new Date(Math.max(...state.entries.map(e=>+new Date(e.at)))):null;
+  const interval=Number(state.profile.interval)||60;
+  const stale=last&&(Date.now()-last.getTime())>interval*2*60000&&total()<goal;
+  const notice=$('#inactivityNotice');
+  if(stale){notice.hidden=false;notice.textContent=t('inactivityText')}else notice.hidden=true;
+
+  if(navigator.setAppBadge){try{navigator.setAppBadge(Math.max(0,Math.round((goal-consumed)/250)))}catch{}}
+
+  renderHistory();renderStats();renderWeekCompare();applyTranslations();renderPushStatus();renderPlatformHints();persist();
+}
+
+function renderHistory(){
+  const entries=dayEntries().slice().sort((a,b)=>new Date(b.at)-new Date(a.at));
+  const list=$('#historyList');
+  if(!entries.length)list.innerHTML=`<div class="empty"><span>💧</span></div>`;
+  else list.innerHTML=entries.map(e=>{
+    const icon=e.kind==='water'?'💧':e.kind==='food'?'🍎':'🥤';
+    return `<div class="entry" data-edit=""><div class="entry-icon"></div><div class="entry-info"><b>e.kind==='food'?t('food'):t('other')))</b><small>state.lang==='uk'?'uk-UA':'en-US',{hour:'2-digit',minute:'2-digit')}</small></div><div class="entry-amount">+</div><button class="remove" data-remove="" aria-label="Удалить">×</button></div>`
+  }).join('');
+  const days=[...new Set(state.entries.map(e=>e.day).filter(d=>d!==today()))].sort().reverse().slice(0,7);
+  $('#historyDays').innerHTML=days.length?days.map(d=>{const n=dayEntries(d).length;return `<div class="entry"><div class="entry-icon">📅</div><div class="entry-info"><b></b><small> </small></div><div class="entry-amount"></div></div>`}).join(''):`<div class="empty"></div>`;
+}
+function fmtDate(day){const d=new Date(day+'T12:00:00');return d.toLocaleDateString(state.lang==='ru'?'ru-RU':state.lang==='uk'?'uk-UA':'en-US',{day:'numeric',month:'short'})}
+
+function renderStats(){
+  const days=Array.from({length:7},(_,i)=>daysBack(6-i));
+  const vals=days.map(total);
+  const goal=effectiveGoal();
+  const max=Math.max(goal,...vals,1);
+  $('#weekBars').innerHTML=days.map((d,i)=>`<div class="bar-col" title=""><div class="bar" style="height:%"></div><small>00:00').toLocaleDateString(state.lang==='ru'?'ru-RU':state.lang==='uk'?'uk-UA':'en-US',{weekday:'short').replace('.','')}</small></div>`).join('');
+  $('#weekAverage').textContent=`: `;
+  $('#goalsMet').textContent=vals.filter(v=>v>=goal).length;
+  $('#bestDay').textContent=fmtAmount(Math.max(...vals,0));
+}
+
+function renderWeekCompare(){
+  const thisWeek=Array.from({length:7},(_,i)=>total(daysBack(i))).reduce((a,b)=>a+b,0);
+  const prevWeek=Array.from({length:7},(_,i)=>total(daysBack(i+7))).reduce((a,b)=>a+b,0);
+  const text=$('#weekCompareText'),icon=$('#weekDeltaIcon');
+  if(prevWeek===0){text.textContent=t('weekDeltaNoData');icon.textContent='📊';return}
+  const delta=Math.round((thisWeek-prevWeek)/prevWeek*100);
+  if(Math.abs(delta)<5){text.textContent=t('weekDeltaSame');icon.textContent='➖'}
+  else if(delta>0){text.textContent=t('weekDeltaUp').replace('{n}',delta);icon.textContent='📈'}
+  else{text.textContent=t('weekDeltaDown').replace('{n}',Math.abs(delta));icon.textContent='📉'}
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function applyTranslations(){
+  document.documentElement.lang=state.lang;
+  $$('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;const tr=translations[state.lang]?.[key];if(tr)el.textContent=tr});
+  $('#loadingText').textContent=state.lang==='ru'?'Загружаем твой водный баланс…':state.lang==='uk'?'Завантажуємо твій водний баланс…':'Loading your hydration balance…';
+  $('#customAmount').placeholder=state.lang==='ru'?'Другой объём':state.lang==='uk'?'Інший об’єм':'Custom amount';
+  $('#todayTitle').textContent=total()>=effectiveGoal()?(state.lang==='ru'?'Цель на сегодня выполнена!':state.lang==='uk'?'Мету на сьогодні виконано!':'Daily goal completed!'):(state.lang==='ru'?'Продолжай в том же духе':state.lang==='uk'?'Продовжуй у тому ж дусі':'Keep up the great work');
+  $('#langBtn').textContent=state.lang.toUpperCase();
+  $$('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===state.lang));
+  $('#versionLabel').textContent='v'+VERSION;
+}
+
+function showView(name){
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));
+  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
+  if(name==='settings')fillSettings();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function fillSettings(){
+  const p=state.profile;
+  $('#profileName').value=p.name;$('#ageGroup').value=p.ageGroup;$('#weight').value=p.weight;$('#goal').value=p.goal;$('#goalMode').value=p.goalMode;$('#activity').value=p.activity;$('#climate').value=p.climate;$('#foodFactor').value=String(p.foodFactor);
+  $('#wake').value=p.wake;$('#sleep').value=p.sleep;$('#interval').value=p.interval;
+  $('#pushToggle').checked=!!p.pushEnabled;
+  $('#apiUrl').value=p.apiUrl||'';
+  $('#serverStatus').textContent=p.apiUrl?t('serverConfigured'):t('serverNotConfigured');
+  $('#storageWarning').hidden=(dbOk||lsOk);
+  renderPushStatus();
+}
+
+/* ─── Push и платформенные подсказки ────────────────────────── */
+function currentPermission(){
+  if(!('Notification'in window))return 'unsupported';
+  return Notification.permission;
+}
+function renderPushStatus(){
+  const dot=$('#pushStatusDot'),text=$('#pushStatusText'),help=$('#pushHelpBox'),helpText=$('#pushHelpText');
+  if(!dot)return;
+  const {isFile,isIOS,isStandalone,isSecure}=PLATFORM;
+  const perm=currentPermission();
+  let cls='',label='',helpMsg='',showHelp=false;
+  if(!('Notification'in window)){cls='err';label=t('pushStatusUnsupported');helpMsg=t('pushHelpUnsupported');showHelp=true}
+  else if(isFile){cls='warn';label=t('pushStatusFile');helpMsg=t('pushHelpFile');showHelp=true}
+  else if(!isSecure){cls='warn';label=t('pushStatusFile');helpMsg=t('pushHelpFile');showHelp=true}
+  else if(isIOS&&!isStandalone){cls='warn';label=t('pushStatusIOS');helpMsg=t('pushHelpIOS');showHelp=true}
+  else if(perm==='granted'){cls='ok';label=t('pushStatusOn');showHelp=false}
+  else if(perm==='denied'){cls='err';label=t('pushStatusDenied');helpMsg=t('pushHelpDenied');showHelp=true}
+  else{cls='warn';label=t('pushStatusOff');helpMsg=t('pushHelpAsk');showHelp=state.profile.pushEnabled}
+  dot.className='status-dot '+cls;
+  text.textContent=label;
+  if(showHelp){help.hidden=false;helpText.textContent=helpMsg}else{help.hidden=true}
+  $('#pushToggle').checked=!!state.profile.pushEnabled && perm==='granted';
+}
+
+function renderPlatformHints(){
+  const container=$('#pushPlatformHint');
+  if(!container)return;
+  container.innerHTML='';
+  // iOS: баннер «Добавь на домашний экран»
+  if(PLATFORM.isIOS && !PLATFORM.isStandalone && !state.installDismissed && !PLATFORM.isTelegram){
+    const b=document.createElement('div');
+    b.className='ios-banner';
+    b.innerHTML=`
+      <div class="ico">📲</div>
+      <div class="ios-banner-content">
+        <b></b>
+        <p></p>
+        <div class="split" style="margin-top:8px">
+          <button class="secondary" id="iosHowTo"></button>
+          <button class="secondary" id="iosLater"></button>
+        </div>
+      </div>`;
+    container.appendChild(b);
+    b.querySelector('#iosHowTo').onclick=()=>{
+      openModal({title:t('installTitle'),html:`<p style="white-space:pre-line"></p>`,onlyCancel:true,cancelLabel:t('gotIt')});
+    };
+    b.querySelector('#iosLater').onclick=()=>{
+      state.installDismissed=true;persist();renderPlatformHints();
+    };
+  }
+}
+
+function howToText(){
+  if(PLATFORM.isIOS)return t('howToIOS');
+  if(PLATFORM.isAndroid)return t('howToAndroid');
+  return t('howToDesktop');
+}
+
+async function togglePush(on){
+  const toggle=$('#pushToggle');
+  if(!on){
+    state.profile.pushEnabled=false;
+    if(state.pushSubscription){
+      try{
+        const reg=await navigator.serviceWorker?.getRegistration().catch(()=>null);
+        const sub=await reg?.pushManager?.getSubscription?.();
+        if(sub)await sub.unsubscribe();
+      }catch{}
+      state.pushSubscription=null;
+    }
+    persist();startReminders();render();fillSettings();
+    showToast(t('pushDisabled'));
+    return;
+  }
+  if(!('Notification'in window)){
+    toggle.checked=false;
+    state.profile.pushEnabled=false;persist();renderPushStatus();
+    openModal({title:t('pushToggle'),html:`<p></p>`,onlyCancel:true,cancelLabel:t('gotIt')});
+    return;
+  }
+  // iOS + не standalone: жёсткая подсказка про установку
+  if(PLATFORM.isIOS && !PLATFORM.isStandalone){
+    toggle.checked=false;
+    state.profile.pushEnabled=false;persist();
+    openModal({
+      title:t('installTitle'),
+      html:`<p style="white-space:pre-line"></p>`,
+      onlyCancel:true,cancelLabel:t('gotIt')
+    });
+    return;
+  }
+  let perm=Notification.permission;
+  if(perm==='default'){
+    try{perm=await Notification.requestPermission()}catch{}
+  }
+  if(perm!=='granted'){
+    toggle.checked=false;
+    state.profile.pushEnabled=false;persist();
+    const isFile=location.protocol==='file:';
+    const html=isFile?`<p></p>`:`<p></p>`;
+    openModal({title:t('pushToggle'),html,onlyCancel:true,cancelLabel:t('gotIt')});
+    renderPushStatus();
+    return;
+  }
+  state.profile.pushEnabled=true;
+  persist();startReminders();render();fillSettings();
+  showToast(t('pushEnabled'));
+  const apiUrl=(state.profile.apiUrl||'').trim();
+  if(apiUrl&&'serviceWorker'in navigator&&'PushManager'in window){
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      let sub=await reg.pushManager.getSubscription();
+      if(!sub){
+        const keyRes=await fetch(apiUrl.replace(/\/$/,'')+'/push/public-key').then(r=>r.ok?r.json():null).catch(()=>null);
+        if(keyRes?.key){
+          const padding='='.repeat((4-keyRes.key.length%4)%4);
+          const base64=(keyRes.key+padding).replace(/-/g,'+').replace(/_/g,'/');
+          const raw=atob(base64);const key=new Uint8Array(raw.length);
+          for(let i=0;i<raw.length;++i)key[i]=raw.charCodeAt(i);
+          sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key});
+        }
+      }
+      if(sub){
+        state.pushSubscription=sub.toJSON();persist();
+        await fetch(apiUrl.replace(/\/$/,'')+'/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),profile:state.profile})}).catch(()=>{});
+      }
+    }catch{}
+  }
+}
+async function recheckPushPermission(){
+  const perm=currentPermission();
+  if(perm==='granted'){
+    state.profile.pushEnabled=true;
+    persist();startReminders();render();fillSettings();
+    showToast(t('pushNowGranted'));
+    return;
+  }
+  if(perm==='denied'){showToast(t('pushStillDenied'));renderPushStatus();return}
+  if(perm==='default'){
+    try{await Notification.requestPermission()}catch{}
+    renderPushStatus();
+  }
+}
+
+/* ─── Напоминания ─────────────────────────────────────────────── */
+let reminderTimer=null;
+async function playChime(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    const ctx=new AC();
+    const o=ctx.createOscillator();
+    const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sine';o.frequency.value=880;
+    g.gain.setValueAtTime(0,ctx.currentTime);
+    g.gain.linearRampToValueAtTime(.15,ctx.currentTime+.05);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.5);
+    o.start();o.stop(ctx.currentTime+.55);
+    setTimeout(()=>ctx.close?.(),800);
+  }catch{}
+}
+async function notify(text){
+  if(!('Notification'in window)||Notification.permission!=='granted')return false;
+  // Вибрация
+  if(navigator.vibrate)try{navigator.vibrate([80,40,80])}catch{}
+  // Звук
+  playChime();
+  try{
+    const reg=await navigator.serviceWorker?.getRegistration().catch(()=>null);
+    if(reg&&reg.showNotification){
+      await reg.showNotification('AquaGlow',{body:text,tag:'aquaglow',renotify:true,badge:undefined});
+      return true;
+    }
+    // Fallback для Android Chrome в обычной вкладке
+    new Notification('AquaGlow',{body:text,tag:'aquaglow'});
+    return true;
+  }catch{return false}
+}
+function tickReminder(){
+  if(document.visibilityState!=='visible')return;
+  if(!state.profile.pushEnabled)return;
+  if(currentPermission()!=='granted')return;
+  const now=new Date();
+  const hm=`:`;
+  if(hm<state.profile.wake||hm>state.profile.sleep)return;
+  const interval=Number(state.profile.interval)||60;
+  if(Date.now()-(state.lastReminder||0)<interval*60000)return;
+  state.lastReminder=Date.now();persist();
+  showToast(t('notificationText'));
+  notify(t('notificationText'));
+}
+function startReminders(){
+  if(reminderTimer){clearInterval(reminderTimer);reminderTimer=null}
+  if(!state.profile.pushEnabled)return;
+  if(currentPermission()!=='granted')return;
+  if(state.lastReminder&&Date.now()-state.lastReminder>24*3600*1000)state.lastReminder=0;
+  tickReminder();
+  reminderTimer=setInterval(tickReminder,30000);
+}
+
+/* ─── Telegram ───────────────────────────────────────────────── */
+function configureTelegram(){
+  const tg=window.Telegram?.WebApp;if(!tg)return;
+  try{
+    tg.ready();tg.expand();
+    const p=tg.themeParams;
+    if(p?.bg_color){
+      document.documentElement.style.setProperty('--bg',p.bg_color);
+    }
+    tg.setHeaderColor?.('#080d0b');
+    tg.setBackgroundColor?.('#080d0b');
+  }catch{}
+}
+
+/* ─── Отчёты ──────────────────────────────────────────────────── */
+function buildReportData(days=30){
+  const list=Array.from({length:days},(_,i)=>daysBack(days-1-i));
+  const perDay=list.map(d=>({day:d,total:total(d),count:dayEntries(d).length}));
+  const avg=perDay.reduce((s,x)=>s+x.total,0)/days;
+  const goal=effectiveGoal();
+  const met=perDay.filter(x=>x.total>=goal).length;
+  const buckets={morning:0,day:0,evening:0,night:0};
+  state.entries.forEach(e=>{
+    const h=new Date(e.at).getHours();const v=rawAmount(e);
+    if(h>=6&&h<12)buckets.morning+=v;else if(h>=12&&h<18)buckets.day+=v;else if(h>=18&&h<24)buckets.evening+=v;else buckets.night+=v;
+  });
+  const topAmount=state.entries.reduce((m,e)=>Math.max(m,e.amount),0);
+  return {days,list,perDay,avg,goal,met,buckets,topAmount,generated:new Date()};
+}
+function openReport(){
+  const r=buildReportData(30);
+  const w=window.open('','_blank','width=800,height=900');
+  if(!w){showToast(t('reportOpen'));return}
+  const rows=r.perDay.map(p=>`<tr><td></td><td style="text-align:right"> </td><td style="text-align:right">%</td><td style="text-align:right"></td></tr>`).join('');
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AquaGlow · </title>
+  <style>body{font-family:system-ui,sans-serif;padding:24px;color:#111;background:#fff;font-size:14px}h1{font-size:20px}h2{font-size:14px;margin:18px 0 6px;color:#333}.meta{color:#666;font-size:11px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}.stat{border:1px solid #ddd;border-radius:8px;padding:9px}.stat b{font-size:16px;display:block}.stat small{color:#666;font-size:11px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:5px 6px;border-bottom:1px solid #eee}th{color:#555;font-size:11px}.bars{display:flex;gap:6px;align-items:flex-end;height:90px}.bar{flex:1;background:#c5ff35;border-radius:4px 4px 0 0;position:relative}.bar small{position:absolute;top:-14px;left:0;right:0;text-align:center;font-size:9px;color:#555}footer{margin-top:20px;color:#888;font-size:10px}@media print{body{padding:10px}}</style></head><body>
+  <h1>AquaGlow · </h1>
+  <div class="meta">: state.lang==='uk'?'uk-UA':'en-US') · </div>
+  <div class="grid">
+    <div class="stat"><small></small><b> </b></div>
+    <div class="stat"><small></small><b> </b></div>
+    <div class="stat"><small></small><b>%</b></div>
+    <div class="stat"><small></small><b> / </b></div>
+    <div class="stat"><small></small><b></b></div>
+    <div class="stat"><small></small><b> </b></div>
+  </div>
+  <h2>('reportDistribution')}</h2>
+  <div class="bars">
+    ${[['morning','reportMorning'],['day','reportDay'],['evening','reportEvening'],['night','reportNight']].map(([k,label])=>{
+      const v=r.buckets[k]||0;const max=Math.max(...Object.values(r.buckets),1);
+      return `<div class="bar" style="height:${Math.max(4,v/max*100)}%"><small>${Math.round(v)}</small></div>`;
+    }).join('')}
+  </div>
+  <h2>${t('dailyIntake')}</h2>
+  <table><thead><tr><th>${t('todayEntries')}</th><th style="text-align:right">${t('ml')}</th><th style="text-align:right">%</th><th style="text-align:right">${t('records')}</th></tr></thead><tbody>${rows}</tbody></table>
+  <footer>AquaGlow · ${t('madeFor')}</footer>
+  <script>setTimeout(()=>window.print?.(),300);<\/script>
+  </body></html>`);
+  w.document.close();
+}
+function exportCsv30(){
+  const r=buildReportData(30);
+  const rows=[['date','total_ml','goal_ml','percent','entries']];
+  r.perDay.forEach(p=>rows.push([p.day,Math.round(p.total),r.goal,Math.round(p.total/r.goal*100),p.count]));
+  const csv=rows.map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquaglow-30d.csv';a.click();URL.revokeObjectURL(url);
+  showToast(t('exported'));
+}
+
+/* ─── Events ─────────────────────────────────────────────────── */
+$$('.drink').forEach(b=>b.addEventListener('click',()=>addEntry(Number(b.dataset.amount),b.dataset.kind)));
+$('#addCustom').addEventListener('click',()=>{
+  const n=Number($('#customAmount').value);const k=$('#customKind').value;
+  if(n>0&&n<=5000){addEntry(n,k);$('#customAmount').value='';$('#customError').textContent=''}
+  else{$('#customError').textContent=t('amountNeeded');showToast(t('amountNeeded'))}
+});
+$('#customAmount').addEventListener('keydown',e=>{if(e.key==='Enter')$('#addCustom').click()});
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+$('#settingsShortcut').addEventListener('click',()=>showView('settings'));
+$('#goSettings').addEventListener('click',()=>showView('settings'));
+$('#fabAdd').addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>$('#customAmount').focus(),300)});
+
+$('#themeBtn').addEventListener('click',()=>{
+  const order=['dark','light','auto'];
+  const i=order.indexOf(state.theme);
+  state.theme=order[(i+1)%order.length];
+  persist();applyTheme();showToast(state.theme);
+});
+$$('[data-theme-set]').forEach(b=>b.addEventListener('click',()=>{state.theme=b.dataset.themeSet;persist();applyTheme()}));
+$$('[data-lang]').forEach(b=>b.addEventListener('click',()=>{state.lang=b.dataset.lang;persist();render();fillSettings();applyTranslations()}));
+$('#langBtn').addEventListener('click',()=>{
+  const order=['ru','en','uk'];const i=order.indexOf(state.lang);
+  state.lang=order[(i+1)%order.length];persist();render();fillSettings();
+});
+
+$('#settingsForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const weight=Number($('#weight').value),goal=Number($('#goal').value);
+  if(!Number.isFinite(weight)||weight<25||weight>300){showToast(t('weightNeeded'));return}
+  if(!Number.isFinite(goal)||goal<250||goal>7000){showToast(t('amountNeeded'));return}
+  state.profile={
+    ...state.profile,
+    name:$('#profileName').value.trim(),
+    ageGroup:$('#ageGroup').value,
+    weight,goal,
+    goalMode:$('#goalMode').value,
+    activity:$('#activity').value,
+    climate:$('#climate').value,
+    foodFactor:Number($('#foodFactor').value)||0,
+    wake:$('#wake').value||'09:00',
+    sleep:$('#sleep').value||'21:00',
+    interval:Number($('#interval').value),
+    pushEnabled:$('#pushToggle').checked,
+    apiUrl:($('#apiUrl').value||'').trim().replace(/\/$/,'')
+  };
+  persist();render();startReminders();showToast(t('saved'));
+});
+$('#pushToggle').addEventListener('change',e=>togglePush(e.target.checked));
+$('#pushRecheck').addEventListener('click',recheckPushPermission);
+$('#pushHowTo').addEventListener('click',()=>{
+  openModal({title:t('howToTitle'),html:`<p style="white-space:pre-line">${howToText()}</p>`,onlyCancel:true,cancelLabel:t('gotIt')});
+});
+
+$('#recalc').addEventListener('click',estimateGoal);
+$('#testBot').addEventListener('click',testServer);
+
+$('#undoLast').addEventListener('click',()=>{
+  const last=dayEntries().sort((a,b)=>new Date(b.at)-new Date(a.at))[0];
+  if(!last)return;removeEntry(last.id);showToast(t('removed'))
+});
+$('#resetToday').addEventListener('click',()=>{
+  openModal({
+    title:t('resetToday'),html:`<p>${t('confirmResetToday')}</p>`,confirmLabel:t('confirm'),danger:true,
+    onConfirm:()=>{state.entries=state.entries.filter(e=>e.day!==today());persist();render();showToast(t('todayReset'))}
+  })
+});
+
+$('#historyList').addEventListener('click',e=>{
+  const rm=e.target.closest('[data-remove]');
+  if(rm){e.stopPropagation();removeEntry(rm.dataset.remove);showToast(t('removed'));return}
+  const row=e.target.closest('[data-edit]');
+  if(!row)return;
+  const id=row.dataset.edit;const entry=state.entries.find(x=>x.id===id);if(!entry)return;
+  openModal({
+    title:t('editEntry'),html:'',
+    extra:`<div class="field"><label>${t('editAmount')}</label><input id="editAmountInput" type="number" min="1" max="5000" step="10" value="${entry.amount}" inputmode="numeric"></div>
+           <div class="field"><label>${t('editLabel')}</label><input id="editLabelInput" maxlength="40" value="${escapeHtml(entry.label||'')}"></div>
+           <div class="field"><label>${t('kindWeight')}</label><select id="editKindInput">
+             <option value="water" ${entry.kind==='water'?'selected':''}>${t('kindWater')}</option>
+             <option value="food" ${entry.kind==='food'?'selected':''}>${t('kindFood')}</option>
+             <option value="other" ${entry.kind==='other'?'selected':''}>${t('kindOther')}</option>
+           </select></div>`,
+    confirmLabel:t('confirm'),
+    onConfirm:()=>{
+      updateEntry(id,{amount:Number($('#editAmountInput').value),label:$('#editLabelInput').value.trim(),kind:$('#editKindInput').value});
+    }
+  });
+});
+
+$('#exportBtn').addEventListener('click',()=>exportJson());
+$('#exportBtn2').addEventListener('click',()=>exportJson());
+function exportJson(){
+  const blob=new Blob([JSON.stringify({profile:state.profile,entries:state.entries,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquaglow-history.json';a.click();URL.revokeObjectURL(url);
+  showToast(t('exported'));
+}
+$('#exportCsvBtn').addEventListener('click',()=>{
+  const rows=[['date','time','amount_ml','kind','label']];
+  state.entries.slice().sort((a,b)=>new Date(a.at)-new Date(b.at)).forEach(e=>{
+    const d=new Date(e.at);
+    rows.push([e.day,d.toLocaleTimeString(state.lang==='ru'?'ru-RU':state.lang==='uk'?'uk-UA':'en-US',{hour:'2-digit',minute:'2-digit'}),e.amount,e.kind,e.label||'']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquaglow-history.csv';a.click();URL.revokeObjectURL(url);
+  showToast(t('exported'));
+});
+$('#reportPrint').addEventListener('click',openReport);
+$('#reportCsv').addEventListener('click',exportCsv30);
+
+$('#importBtn').addEventListener('click',()=>importJson());
+$('#importBtn2').addEventListener('click',()=>importJson());
+function importJson(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=async ev=>{
+    const f=ev.target.files[0];if(!f)return;
+    try{
+      const data=JSON.parse(await f.text());
+      openModal({
+        title:t('import'),html:`<p>${t('confirmImport')}</p>`,confirmLabel:t('confirm'),
+        onConfirm:()=>{
+          if(data.profile)state.profile={...state.profile,...data.profile};
+          const ids=new Set(state.entries.map(x=>x.id));
+          const add=(data.entries||[]).filter(x=>!ids.has(x.id));
+          state.entries.push(...add);persist();render();fillSettings();
+          showToast(t('imported').replace('{n}',add.length));
+        }
+      });
+    }catch{showToast(t('importError'))}
+  };
+  inp.click();
+}
+
+$('#resetData').addEventListener('click',()=>{
+  openModal({
+    title:t('reset'),html:`<p>${t('confirmReset')}</p>`,confirmLabel:t('reset'),danger:true,
+    onConfirm:async()=>{
+      state=emptyState();
+      if(dbOk)await dbSet('root',state);
+      persist();render();fillSettings();applyTheme();startReminders();showToast(t('saved'))
+    }
+  })
+});
+
+async function estimateGoal(){
+  const w=Number($('#weight').value);
+  if(!Number.isFinite(w)||w<25||w>300){showToast(t('weightNeeded'));return}
+  const snapshot={...state.profile,weight:w,ageGroup:$('#ageGroup').value,activity:$('#activity').value,climate:$('#climate').value,goalMode:'auto'};
+  const old=state.profile;state.profile=snapshot;
+  const a=computeAutoGoal();
+  state.profile=old;
+  $('#goal').value=a.goal;$('#goalMode').value='auto';
+  showToast(t('goalCalc'));
+}
+async function testServer(){
+  const url=(state.profile.apiUrl||'').trim();
+  if(!url){showToast(t('serverMissing'));return}
+  try{const r=await fetch(url.replace(/\/$/,'')+'/health');if(!r.ok)throw 0;$('#serverStatus').textContent=t('serverOk');showToast(t('serverOk'))}
+  catch{$('#serverStatus').textContent=t('serverError');showToast(t('serverError'))}
+}
+
+/* ─── Service Worker ─────────────────────────────────────────── */
+async function registerSW(){
+  if(!('serviceWorker'in navigator))return;
+  if(location.protocol!=='http:'&&location.protocol!=='https:')return;
+  try{
+    const swCode=`
+      self.addEventListener('install',e=>self.skipWaiting());
+      self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+      self.addEventListener('notificationclick',e=>{
+        e.notification.close();
+        e.waitUntil(clients.matchAll({type:'window'}).then(cs=>{
+          for(const c of cs){if('focus'in c)return c.focus()}
+          return clients.openWindow?.('./');
+        }));
+      });
+      self.addEventListener('push',e=>{
+        let data={title:'AquaGlow',body:'💧'};
+        try{if(e.data)data=Object.assign(data,e.data.json())}catch{}
+        e.waitUntil(self.registration.showNotification(data.title,{body:data.body,icon:data.icon||undefined,tag:'aquaglow',renotify:true,vibrate:[80,40,80]}));
+      });
+    `;
+    const url=URL.createObjectURL(new Blob([swCode],{type:'text/javascript'}));
+    const reg=await navigator.serviceWorker.register(url,{scope:'./'});
+    console.log('AquaGlow: SW registered',reg.scope);
+  }catch(e){
+    console.warn('AquaGlow: SW not registered —',e?.message||e);
+  }
+}
+
+/* ─── Обработка клавиатуры на iOS: подъём FAB ───────────────── */
+if(window.visualViewport){
+  const vv=window.visualViewport;
+  vv.addEventListener('resize',()=>{
+    document.documentElement.style.setProperty('--vh',(vv.height*0.01)+'px');
+  });
+}
+
+/* ─── Старт ──────────────────────────────────────────────────── */
+(async function start(){
+  try{
+    lsOk=checkLS();
+    await loadState();
+    applyTheme();
+    configureTelegram();
+    render();
+    fillSettings();
+    startReminders();
+    setTimeout(()=>$('#loading')?.classList.add('done'),350);
+    registerSW().catch(()=>{});
+    if(!dbOk&&!lsOk)$('#storageWarning').hidden=false;else $('#storageWarning').hidden=true;
+  }catch(err){
+    console.error('AquaGlow start error:',err);
+    const lt=$('#loadingText');
+    if(lt)lt.textContent=t('startError')+(err?.message||err);
+    setTimeout(()=>$('#loading')?.classList.add('done'),3000);
+  }
+  window.addEventListener('error',()=>$('#loading')?.classList.add('done'));
+  setTimeout(()=>$('#loading')?.classList.add('done'),3000);
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='visible'){try{render();tickReminder()}catch(e){console.error(e)}}
+  });
+})();
+})();
+</script>
+</body>
+</html>
